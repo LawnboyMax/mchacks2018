@@ -18,6 +18,7 @@ function initMyo(){
 		renderer.render(scene, camera);
 
 	});
+
 	Myo.on('imu', function(data){
 		playerXPos = data.orientation.y / 0.35;
 		if(data.orientation.z > 0.5){

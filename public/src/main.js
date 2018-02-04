@@ -100,8 +100,10 @@ function initRenderer() {
 function onAfterLoad() {
 	setInterval(function() {
 		if(playerHealth > 0){
+			if (started) {
 			playerScore++;
 			document.getElementById('playerScore').innerHTML = playerScore;
+		}
 		}
 	}, 1000)
 	//onRender(); // uncomment this if want to use without Myo; comment if want to use with Myo
@@ -217,9 +219,8 @@ function onKeypress(e) {
 	//console.log(e.keyCode);
 
 	if(e.keyCode == 32) {
-		started = true;
-
 		shootBullet();
+		started = true;
 	}
 }
 
