@@ -6,9 +6,9 @@ var WINDOW_WIDTH = 800;
 var WINDOW_HEIGHT = 600;
 
 var PLANE_WIDTH = 10;
-var PLANE_LENGTH = 1000;
+var PLANE_LENGTH = 10000;
 var OBSTACLE_WIDTH = 1;
-var N_OBSTACLES = 100;
+var N_OBSTACLES = 1000;
 var N_BULLETS_POOL = 2;
 var BULLET_SPEED = 0.1;
 var BULLET_SIZE = 0.1;
@@ -27,6 +27,7 @@ var geoObstacle = null;
 var matObstacle = null;
 var obstacles = [];
 var obstacle_meshes = [];
+var bool_obstacles = [];
 var player = null;
 var playerAABB = null;
 
@@ -103,8 +104,8 @@ function onAfterLoad() {
 			document.getElementById('playerScore').innerHTML = playerScore;
 		}
 	}, 1000)
-	onRender(); // uncomment this if want to use without Myo; comment if want to use with Myo
-	// initMyo(); // comment this if want to use without Myo; uncomment if want to use with Myo
+	//onRender(); // uncomment this if want to use without Myo; comment if want to use with Myo
+	initMyo(); // comment this if want to use without Myo; uncomment if want to use with Myo
 	startScreen();
 }
 
@@ -188,7 +189,7 @@ function createPlayer() {
 			player = object;
 
 			playerAABB = new THREE.Box3();
-			playerAABB.setFromCenterAndSize(player.position, new THREE.Vector3(0.5,1,1));
+			playerAABB.setFromCenterAndSize(player.position, new THREE.Vector3(0.25,1,1));
 			//playerAABB.setFromObject(player);
 			//console.log(playerAABB);
 			//var helper = new THREE.Box3Helper(playerAABB, 0xffff00 );
@@ -265,6 +266,7 @@ function generateObstacles() {
 		var y = Math.random();
 		var obstacle = positionObstacle(x,y);
 		obstacles.push(obstacle);
+		bool_obstacles.push(false);
 	}
 }
 
@@ -360,6 +362,8 @@ function checkBulletCollision(bullet) {
 			bullet.mesh.visible = false;
 			//console.log(obstacle_meshes);
 			obstacle_meshes[i].visible = false;
+			bool_obstacles[i] = true;
+
 		}
 	}
 }
@@ -384,10 +388,12 @@ function isBulletCollideObstacle(bullet, obstacle) {
 function checkPlayerCollision(player) {
 	for(var i = 0; i < obstacles.length; i++) {
 		var obstacle = obstacles[i];
-		if(isPlayerCollideObstacle(player,obstacle)) {
-			playerHealth--;
-			healthBar.scale.x = HEALTH_BAR_WIDTH - (HEALTH_BAR_WIDTH * ( 1 - (playerHealth / PLAYER_MAX_HEALTH)));
-			console.log(healthBar.scale.x);
+		if (bool_obstacles[i] == false) {
+			if(isPlayerCollideObstacle(player,obstacle)) {
+				playerHealth--;
+				healthBar.scale.x = HEALTH_BAR_WIDTH - (HEALTH_BAR_WIDTH * ( 1 - (playerHealth / PLAYER_MAX_HEALTH)));
+				console.log(healthBar.scale.x);
+			}
 		}
 	}
 }
