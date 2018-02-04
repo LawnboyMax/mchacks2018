@@ -25,4 +25,8 @@ function initMyo(){
 			shootBullet();
 		}
 	});
+
+	Myo.on('fist', function(data){
+		started = true;
+	})
 }
