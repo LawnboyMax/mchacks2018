@@ -43,6 +43,9 @@ var healthBar = null;
 
 var playerScore = 0;
 
+var started = false;
+var startScreenMesh = null;
+
 // Events & callbacks
 document.addEventListener("load", onLoad());
 document.addEventListener("keypress", onKeypress);
@@ -89,7 +92,7 @@ function initRenderer() {
 	reflectionCube.format = THREE.RGBFormat;
 	scene.background = reflectionCube;
 
-	add3DAxis();
+	//add3DAxis();
 	initGame();
 }
 
@@ -102,6 +105,7 @@ function onAfterLoad() {
 	}, 1000)
 	onRender(); // uncomment this if want to use without Myo; comment if want to use with Myo
 	// initMyo(); // comment this if want to use without Myo; uncomment if want to use with Myo
+	startScreen();
 }
 
 function initGame() {
@@ -212,8 +216,29 @@ function onKeypress(e) {
 	//console.log(e.keyCode);
 
 	if(e.keyCode == 32) {
+		started = true;
+
 		shootBullet();
 	}
+}
+
+function startScreen() {
+	// textures
+	var texture = new THREE.TextureLoader().load( 'assets/textures/start.jpg' );
+	/*var maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
+	texture.anisotropy = maxAnisotropy;
+	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set(685/2, 494/2);*/
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set( 1,1	);
+
+	var geoPlane = new THREE.BoxGeometry(685, 0.001, 494);
+	var matPlane = new THREE.MeshBasicMaterial( {map : texture} );
+	startScreenMesh = new THREE.Mesh(geoPlane, matPlane);
+	startScreenMesh.scale.set(0.1/14,0.1/14,0.1/14);
+	startScreenMesh.position.set(0,0.5,1);
+	scene.add(startScreenMesh);
 }
 
 function shootBullet() {
@@ -280,6 +305,9 @@ function repaint() {
 }
 
 function onUpdate() {
+	if(!started) {
+		return;
+	}
 	var dt = performance.now()-lastTime;
 	lastTime = performance.now();
 
