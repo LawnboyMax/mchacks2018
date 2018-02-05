@@ -1,6 +1,10 @@
 # mchacks2018
 McHacks 2018
 
+Winner of "Best Retro Hack" at McHacks 2018 (McGill University).
+
+https://devpost.com/software/neon-s2grn1
+
 ## Installing the Application
 
 1. Clone the repo: `git clone https://github.com/kevenv/mchacks2018.git`
